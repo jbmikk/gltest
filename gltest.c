@@ -214,6 +214,10 @@ int main(void)
 
 	glDeleteBuffers(1, &vertexbuffer);
 	glDeleteVertexArrays(1, &VertexArrayID);
+	glDetachShader(program, fragmentShader);
+	glDetachShader(program, vertexShader);
+	glDeleteShader(fragmentShader);
+	glDeleteShader(vertexShader);
 	glDeleteProgram(program);
 
 	glfwTerminate();
