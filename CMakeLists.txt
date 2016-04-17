@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 2.8.0)
 project (gltest)
 
-add_executable (gltest gltest.c)
+add_executable (gltest gltest.c matrix.c)
 
 
 #Link GLFW

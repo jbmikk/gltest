@@ -4,14 +4,24 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "matrix.h"
+
 #define GLEW_STATIC 1
 
-const GLchar vertexShaderSource[] =
+const GLchar basicVertexShaderSource[] =
 	"#version 330 core\n"
 	"layout(location = 0) in vec3 vertexPosition_modelspace;\n"
 	"void main() {\n"
 	"    gl_Position.xyz = vertexPosition_modelspace;\n"
 	"    gl_Position.w = 1.0;\n"
+	"}";
+
+const GLchar mvpVertexShaderSource[] =
+	"#version 330 core\n"
+	"layout(location = 0) in vec3 vertexPosition_modelspace;\n"
+	"uniform mat4 MVP;\n"
+	"void main() {\n"
+	"    gl_Position = MVP * vec4(vertexPosition_modelspace,1);\n"
 	"}";
 
 const GLchar fragmentShaderSource[] =
@@ -121,7 +131,7 @@ int main(void)
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // MacOS fix
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	window = glfwCreateWindow( 1024, 768, "Test", NULL, NULL);
+	window = glfwCreateWindow( 640, 480, "Test", NULL, NULL);
 	if(!window) {
 		fprintf( stderr, "Failed to open GLFW window.\n" );
 		getchar();
@@ -172,7 +182,7 @@ int main(void)
 	
 	GLuint vertexShader, fragmentShader;
 
-	loadShader(&vertexShader, GL_VERTEX_SHADER, vertexShaderSource);
+	loadShader(&vertexShader, GL_VERTEX_SHADER, mvpVertexShaderSource);
 	loadShader(&fragmentShader, GL_FRAGMENT_SHADER, fragmentShaderSource);
 
 
@@ -182,10 +192,26 @@ int main(void)
 	GLuint program;
 	createProgram(&program, vertexShader, fragmentShader);
 
+
+	// Get MVP uniform
+	// ---------------
+
+	GLuint mvp_ul = glGetUniformLocation(program, "MVP");
+
+	Mat4 model = {
+		{1.0f, 0.0f, 0.0f, 0.0f},
+		{0.0f, 1.0f, 0.0f, 0.0f},
+		{0.0f, 0.0f, 1.0f, 0.0f},
+		{0.0f, 0.0f, 0.0f, 1.0f}
+	};
+
 	do {
 		glClear( GL_COLOR_BUFFER_BIT );
 
 		glUseProgram(program);
+		
+		// Set MVP transform
+		glUniformMatrix4fv(mvp_ul, 1, GL_FALSE, &model[0][0]);
 
 		glEnableVertexAttribArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
