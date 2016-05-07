@@ -288,15 +288,6 @@ int main(void)
 
 	GLuint mvp_ul = glGetUniformLocation(program, "MVP");
 
-	Mat4 model = {
-		{1.0f, 0.0f, 0.0f, 0.0f},
-		{0.0f, 1.0f, 0.0f, 0.0f},
-		{0.0f, 0.0f, 1.0f, 0.0f},
-		{0.0f, 0.0f, 0.0f, 1.0f}
-	};
-	printf("Model:\n");
-	print_m4(&model);
-	
 	Mat4 s;
 	scale_m4(&s, 0.5f, 0.5f, 0.5f);
 	printf("Scale:\n");
@@ -307,23 +298,28 @@ int main(void)
 	printf("Rotate:\n");
 	print_m4(&r);
 
-	Mat4 scaled;
-	printf("Scaled:\n");
-	mul_m4(&scaled, &s, &model);
-	print_m4(&scaled);
+	Mat4 t;
+	translate_m4(&t, 0.1f, 0.1f, 0.1f);
+	printf("Translate:\n");
+	print_m4(&t);
 
-	Mat4 mvp;
-	printf("Mvp:\n");
-	mul_m4(&mvp, &r, &scaled);
-	print_m4(&mvp);
+	Mat4 rs;
+	printf("Rotated*Scaled:\n");
+	mul_m4(&rs, &r, &s);
+	print_m4(&rs);
 
+	Mat4 model;
+	printf("Model:\n");
+	mul_m4(&model, &t, &rs);
+	print_m4(&model);
+	
 	do {
 		glClear( GL_COLOR_BUFFER_BIT );
 
 		glUseProgram(program);
 		
 		// Set MVP transform
-		glUniformMatrix4fv(mvp_ul, 1, GL_FALSE, &mvp[0][0]);
+		glUniformMatrix4fv(mvp_ul, 1, GL_TRUE, &model[0][0]);
 
 		// Cube vertex
 		glEnableVertexAttribArray(0);
