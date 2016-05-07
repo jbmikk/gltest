@@ -288,18 +288,22 @@ int main(void)
 
 	GLuint mvp_ul = glGetUniformLocation(program, "MVP");
 
+
+	// Model Matrix
+	// ------------
+
 	Mat4 s;
 	scale_m4(&s, 0.5f, 0.5f, 0.5f);
 	printf("Scale:\n");
 	print_m4(&s);
 
 	Mat4 r;
-	rotate_m4(&r, 1.0f, 1.0f, 1.0f, 0.5f);
+	rotate_m4(&r, 1.0f, 1.0f, 1.0f, 0.2f);
 	printf("Rotate:\n");
 	print_m4(&r);
 
 	Mat4 t;
-	translate_m4(&t, 0.1f, 0.1f, 0.1f);
+	translate_m4(&t, 0.1f, 0.1f, -2.0f);
 	printf("Translate:\n");
 	print_m4(&t);
 
@@ -312,6 +316,24 @@ int main(void)
 	printf("Model:\n");
 	mul_m4(&model, &t, &rs);
 	print_m4(&model);
+
+
+	// Projection Matrix
+	// -----------------
+
+	Mat4 projection;
+	perspective_m4(&projection, 1.0f, (640.0f/480.0f), 0.1f, 100.0f);
+	printf("Perspective:\n");
+	print_m4(&projection);
+	
+
+	// Mvp Matrix
+	// ----------
+	
+	Mat4 mvp;
+	mul_m4(&mvp, &projection, &model);
+	printf("Perspective:\n");
+	print_m4(&mvp);
 	
 	do {
 		glClear( GL_COLOR_BUFFER_BIT );
@@ -319,7 +341,7 @@ int main(void)
 		glUseProgram(program);
 		
 		// Set MVP transform
-		glUniformMatrix4fv(mvp_ul, 1, GL_TRUE, &model[0][0]);
+		glUniformMatrix4fv(mvp_ul, 1, GL_TRUE, &mvp[0][0]);
 
 		// Cube vertex
 		glEnableVertexAttribArray(0);
