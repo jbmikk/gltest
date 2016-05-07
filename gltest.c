@@ -283,6 +283,13 @@ int main(void)
 	createProgram(&program, vertexShader, fragmentShader);
 
 
+	// Enable z-buffer
+	// ---------------
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+
+
 	// Get MVP uniform
 	// ---------------
 
@@ -298,7 +305,7 @@ int main(void)
 	print_m4(&s);
 
 	Mat4 r;
-	rotate_m4(&r, 1.0f, 1.0f, 1.0f, 0.2f);
+	rotate_m4(&r, 1.0f, 1.0f, 1.0f, 0.6f);
 	printf("Rotate:\n");
 	print_m4(&r);
 
@@ -336,7 +343,7 @@ int main(void)
 	print_m4(&mvp);
 	
 	do {
-		glClear( GL_COLOR_BUFFER_BIT );
+		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 		glUseProgram(program);
 		
