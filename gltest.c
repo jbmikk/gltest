@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 
 #include "matrix.h"
+#include "model.h"
 
 #define GLEW_STATIC 1
 
@@ -35,7 +36,7 @@ const GLchar fragmentShaderSource[] =
 	"    color = fragmentColor;\n"
 	"}";
 
-static const GLfloat cube_vertex_data[] = {
+static GLfloat cube_vertex_data[] = {
     -1.0f,-1.0f,-1.0f,
     -1.0f,-1.0f, 1.0f,
     -1.0f, 1.0f, 1.0f,
@@ -74,7 +75,7 @@ static const GLfloat cube_vertex_data[] = {
     1.0f,-1.0f, 1.0f
 };
 
-static const GLfloat cube_color_data[] = {
+static GLfloat cube_color_data[] = {
     0.583f,  0.771f,  0.014f,
     0.609f,  0.115f,  0.436f,
     0.327f,  0.483f,  0.844f,
@@ -244,27 +245,15 @@ int main(void)
 	glBindVertexArray(VertexArrayID);
 
 
-	//Load vertex buffer
-	//------------------
-	static const GLfloat *vertex_data = cube_vertex_data;
-	static const int vertex_count = sizeof(cube_vertex_data);
+	//Load model
+	//----------
 
-	GLuint vertexbuffer;
-	glGenBuffers(1, &vertexbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	glBufferData(GL_ARRAY_BUFFER, vertex_count, vertex_data, GL_STATIC_DRAW);
-
-
-	//Load color buffer
-	//-----------------
-
-	static const GLfloat *color_data = cube_color_data;
-	static const int color_count = sizeof(cube_color_data);
-
-	GLuint colorbuffer;
-	glGenBuffers(1, &colorbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-	glBufferData(GL_ARRAY_BUFFER, color_count, color_data, GL_STATIC_DRAW);
+	Model cube;
+	model_init(&cube);
+	model_set_data_length(&cube, sizeof(cube_vertex_data));
+	model_set_vertices(&cube, cube_vertex_data);
+	model_set_colors(&cube, cube_color_data);
+	model_bind(&cube);
 
 
 	//Create shaders
@@ -350,33 +339,7 @@ int main(void)
 		// Set MVP transform
 		glUniformMatrix4fv(mvp_ul, 1, GL_TRUE, &mvp[0][0]);
 
-		// Cube vertex
-		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-		glVertexAttribPointer(
-			0,
-			3,
-			GL_FLOAT,
-			GL_FALSE,
-			0,
-			(void*)0
-		);
-
-		// Cube colors
-		glEnableVertexAttribArray(1);
-		glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-		glVertexAttribPointer(
-			1,
-			3,
-			GL_FLOAT,
-			GL_FALSE,
-			0,
-			(void*)0
-		);
-
-		glDrawArrays(GL_TRIANGLES, 0, vertex_count*3); 
-
-		glDisableVertexAttribArray(0);
+		model_render(&cube);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -388,7 +351,7 @@ int main(void)
 	// Dispose
 	// -------
 
-	glDeleteBuffers(1, &vertexbuffer);
+	model_dispose(&cube);
 	glDeleteVertexArrays(1, &VertexArrayID);
 	glDetachShader(program, fragmentShader);
 	glDetachShader(program, vertexShader);
