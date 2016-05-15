@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 2.8.0)
 project (gltest)
 
-add_executable (gltest gltest.c matrix.c model.c)
+add_executable (gltest gltest.c matrix.c texture.c model.c)
 
 
 #Link GLFW
@@ -30,3 +30,11 @@ message(STATUS "Link GLEW: ${GLEW_LIBRARIES}")
 find_package(OpenGL REQUIRED)
 target_link_libraries(gltest ${OPENGL_LIBRARIES} )
 message(STATUS "Link OpenGl: ${OPENGL_LIBRARIES}")
+
+
+message(STATUS "Copy Textures")
+file(COPY textures DESTINATION .)
+file(GLOB files "textures/*")
+foreach(filename ${files})
+	file(COPY ${filename} DESTINATION "./textures")
+endforeach()

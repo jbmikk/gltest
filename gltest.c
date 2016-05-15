@@ -21,19 +21,25 @@ const GLchar mvpVertexShaderSource[] =
 	"#version 330 core\n"
 	"layout(location = 0) in vec3 vertexPosition_modelspace;\n"
 	"layout(location = 1) in vec3 vertexColor;\n"
+	"layout(location = 2) in vec2 vertexUV;\n"
 	"uniform mat4 MVP;\n"
 	"out vec3 fragmentColor;\n"
+	"out vec2 fragmentUV;\n"
 	"void main() {\n"
 	"    gl_Position = MVP * vec4(vertexPosition_modelspace,1);\n"
 	"    fragmentColor = vertexColor;\n"
+	"    fragmentUV = vertexUV;\n"
 	"}";
 
 const GLchar fragmentShaderSource[] =
 	"#version 330 core\n"
 	"in vec3 fragmentColor;\n"
+	"in vec2 fragmentUV;\n"
 	"out vec3 color;\n"
+	"uniform sampler2D textureSampler;\n"
 	"void main() {\n"
-	"    color = fragmentColor;\n"
+	//"    color = fragmentColor;\n"
+	"    color = texture(textureSampler, fragmentUV).rgb;\n"
 	"}";
 
 static GLfloat cube_vertex_data[] = {
@@ -112,6 +118,45 @@ static GLfloat cube_color_data[] = {
     0.673f,  0.211f,  0.457f,
     0.820f,  0.883f,  0.371f,
     0.982f,  0.099f,  0.879f
+};
+
+static GLfloat cube_uv_data[] = {
+	0.000059f, 1.0f-0.000004f,
+	0.000103f, 1.0f-0.336048f,
+	0.335973f, 1.0f-0.335903f,
+	1.000023f, 1.0f-0.000013f,
+	0.667979f, 1.0f-0.335851f,
+	0.999958f, 1.0f-0.336064f,
+	0.667979f, 1.0f-0.335851f,
+	0.336024f, 1.0f-0.671877f,
+	0.667969f, 1.0f-0.671889f,
+	1.000023f, 1.0f-0.000013f,
+	0.668104f, 1.0f-0.000013f,
+	0.667979f, 1.0f-0.335851f,
+	0.000059f, 1.0f-0.000004f,
+	0.335973f, 1.0f-0.335903f,
+	0.336098f, 1.0f-0.000071f,
+	0.667979f, 1.0f-0.335851f,
+	0.335973f, 1.0f-0.335903f,
+	0.336024f, 1.0f-0.671877f,
+	1.000004f, 1.0f-0.671847f,
+	0.999958f, 1.0f-0.336064f,
+	0.667979f, 1.0f-0.335851f,
+	0.668104f, 1.0f-0.000013f,
+	0.335973f, 1.0f-0.335903f,
+	0.667979f, 1.0f-0.335851f,
+	0.335973f, 1.0f-0.335903f,
+	0.668104f, 1.0f-0.000013f,
+	0.336098f, 1.0f-0.000071f,
+	0.000103f, 1.0f-0.336048f,
+	0.000004f, 1.0f-0.671870f,
+	0.336024f, 1.0f-0.671877f,
+	0.000103f, 1.0f-0.336048f,
+	0.336024f, 1.0f-0.671877f,
+	0.335973f, 1.0f-0.335903f,
+	0.667969f, 1.0f-0.671889f,
+	1.000004f, 1.0f-0.671847f,
+	0.667979f, 1.0f-0.335851f
 };
 
 int printError() 
@@ -253,6 +298,8 @@ int main(void)
 	model_set_data_length(&cube, sizeof(cube_vertex_data));
 	model_set_vertices(&cube, cube_vertex_data);
 	model_set_colors(&cube, cube_color_data);
+	model_set_uv_map(&cube, cube_uv_data);
+	model_set_texture(&cube, "./textures/bricks.dds");
 	model_bind(&cube);
 
 
@@ -294,7 +341,7 @@ int main(void)
 	print_m4(&s);
 
 	Mat4 r;
-	rotate_m4(&r, 1.0f, 1.0f, 1.0f, 0.6f);
+	rotate_m4(&r, 0.0f, 1.0f, 0.0f, 1.0f);
 	printf("Rotate:\n");
 	print_m4(&r);
 
