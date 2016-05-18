@@ -336,17 +336,17 @@ int main(void)
 	// ------------
 
 	Mat4 s;
-	scale_m4(&s, 0.5f, 0.5f, 0.5f);
+	scale_m4(&s, 0.1f, 0.1f, 0.1f);
 	printf("Scale:\n");
 	print_m4(&s);
 
 	Mat4 r;
-	rotate_m4(&r, 0.0f, 1.0f, 0.0f, 1.0f);
+	rotate_m4(&r, 0.0f, 1.0f, 0.0f, 0.0f);
 	printf("Rotate:\n");
 	print_m4(&r);
 
 	Mat4 t;
-	translate_m4(&t, 0.1f, 0.1f, -2.0f);
+	translate_m4(&t, 0.0f, 0.0f, 0.0f);
 	printf("Translate:\n");
 	print_m4(&t);
 
@@ -361,6 +361,18 @@ int main(void)
 	print_m4(&model);
 
 
+	// Camera
+	// ------
+
+	Mat4 view;
+	Vec3 pos = {0.5f, 0.5f, 0.8f};
+	Vec3 center = {0.0f, -0.2f, 0.2f};
+	Vec3 up = {0.0f, 1.0f, 0.0f};
+	look_at_m4(&view, &pos, &center, &up);
+	printf("View:\n");
+	print_m4(&view);
+
+
 	// Projection Matrix
 	// -----------------
 
@@ -373,8 +385,13 @@ int main(void)
 	// Mvp Matrix
 	// ----------
 	
+	Mat4 mv;
+	mul_m4(&mv, &view, &model);
+	printf("Model View:\n");
+	print_m4(&mv);
+
 	Mat4 mvp;
-	mul_m4(&mvp, &projection, &model);
+	mul_m4(&mvp, &projection, &mv);
 	printf("Perspective:\n");
 	print_m4(&mvp);
 	
