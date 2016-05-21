@@ -6,6 +6,7 @@
 
 #include "matrix.h"
 #include "model.h"
+#include "camera.h"
 
 #define GLEW_STATIC 1
 
@@ -364,34 +365,29 @@ int main(void)
 	// Camera
 	// ------
 
-	Mat4 view;
+	Camera camera;
+
 	Vec3 pos = {0.5f, 0.5f, 0.8f};
 	Vec3 center = {0.0f, -0.2f, 0.2f};
 	Vec3 up = {0.0f, 1.0f, 0.0f};
-	look_at_m4(&view, &pos, &center, &up);
-	printf("View:\n");
-	print_m4(&view);
 
+	camera_init(&camera);
+	camera_set_position(&camera, &pos);
+	camera_set_center(&camera, &center);
+	camera_set_up(&camera, &up);
 
-	// Projection Matrix
-	// -----------------
+	camera_set_fov(&camera, 1.0f);
+	camera_set_aspect(&camera, (640.0f/480.0f));
 
-	Mat4 projection;
-	perspective_m4(&projection, 1.0f, (640.0f/480.0f), 0.1f, 100.0f);
-	printf("Perspective:\n");
-	print_m4(&projection);
-	
 
 	// Mvp Matrix
 	// ----------
 	
-	Mat4 mv;
-	mul_m4(&mv, &view, &model);
-	printf("Model View:\n");
-	print_m4(&mv);
+	Mat4 vp;
+	camera_get_matrix(&camera, &vp);
 
 	Mat4 mvp;
-	mul_m4(&mvp, &projection, &mv);
+	mul_m4(&mvp, &vp, &model);
 	printf("Perspective:\n");
 	print_m4(&mvp);
 	
