@@ -260,7 +260,10 @@ int main(void)
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // MacOS fix
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	window = glfwCreateWindow( 640, 480, "Test", NULL, NULL);
+	int w_width = 640;
+	int w_height = 480;
+
+	window = glfwCreateWindow( w_width, w_height, "Test", NULL, NULL);
 	if(!window) {
 		fprintf( stderr, "Failed to open GLFW window.\n" );
 		getchar();
@@ -377,25 +380,29 @@ int main(void)
 	camera_set_up(&camera, &up);
 
 	camera_set_fov(&camera, 1.0f);
-	camera_set_aspect(&camera, (640.0f/480.0f));
-
-
-	// Mvp Matrix
-	// ----------
-	
-	Mat4 vp;
-	camera_get_matrix(&camera, &vp);
-
-	Mat4 mvp;
-	mul_m4(&mvp, &vp, &model);
-	printf("Perspective:\n");
-	print_m4(&mvp);
+	camera_set_aspect(&camera, (float)w_width/(float)w_height);
 	
 	do {
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 		glUseProgram(program);
 		
+
+		// Mvp Matrix
+		// ----------
+
+		glfwGetWindowSize(window, &w_width, &w_height);
+		camera_set_aspect(&camera, (float)w_width/(float)w_height);
+	
+		Mat4 vp;
+		camera_get_matrix(&camera, &vp);
+
+		Mat4 mvp;
+		mul_m4(&mvp, &vp, &model);
+		printf("Perspective:\n");
+		print_m4(&mvp);
+
+
 		// Set MVP transform
 		glUniformMatrix4fv(mvp_ul, 1, GL_TRUE, &mvp[0][0]);
 
