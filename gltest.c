@@ -380,7 +380,7 @@ int main(void)
 	camera_set_up(&camera, &up);
 
 	camera_set_fov(&camera, 1.0f);
-	camera_set_aspect(&camera, window.width/window.height);
+	camera_set_aspect(&camera, (float)window.width/(float)window.height);
 	
 	do {
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
