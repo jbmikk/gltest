@@ -7,6 +7,7 @@
 #include "matrix.h"
 #include "model.h"
 #include "camera.h"
+#include "window.h"
 
 #define GLEW_STATIC 1
 
@@ -240,10 +241,19 @@ int createProgram(GLuint *program, GLuint vertexShader, GLuint fragmentShader)
 	return 0;
 }
 
+
+Window window;
+Camera camera;
+
+void window_size_callback(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
+
+	camera_set_aspect(&camera, (float)width/(float)height);
+}
+
 int main(void)
 {
-	GLFWwindow* window;
-
 	if(!glfwInit()) {
 		printf("Could not init GLFW");
 		getchar();
@@ -260,17 +270,14 @@ int main(void)
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // MacOS fix
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	int w_width = 640;
-	int w_height = 480;
-
-	window = glfwCreateWindow( w_width, w_height, "Test", NULL, NULL);
-	if(!window) {
-		fprintf( stderr, "Failed to open GLFW window.\n" );
+	if(window_init(&window, 640, 480, "Test")) {
+		fprintf( stderr, "Failed to open window.\n" );
 		getchar();
 		glfwTerminate();
-		return -1;
-	}
-	glfwMakeContextCurrent(window);
+	};
+
+	window_set_size_callback(&window, window_size_callback);
+
 
 	glewExperimental = GL_TRUE; // Needed for core profile
 	if (glewInit() != GLEW_OK) {
@@ -282,12 +289,7 @@ int main(void)
 	//#clear errors GLEW may trigger
 	printError();
 	
-
-	// Ensure we can capture the escape key being pressed below
-	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
-
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
-
 
 	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
@@ -368,8 +370,6 @@ int main(void)
 	// Camera
 	// ------
 
-	Camera camera;
-
 	Vec3 pos = {0.5f, 0.5f, 0.8f};
 	Vec3 center = {0.0f, -0.2f, 0.2f};
 	Vec3 up = {0.0f, 1.0f, 0.0f};
@@ -380,7 +380,7 @@ int main(void)
 	camera_set_up(&camera, &up);
 
 	camera_set_fov(&camera, 1.0f);
-	camera_set_aspect(&camera, (float)w_width/(float)w_height);
+	camera_set_aspect(&camera, window.width/window.height);
 	
 	do {
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -391,9 +391,6 @@ int main(void)
 		// Mvp Matrix
 		// ----------
 
-		glfwGetWindowSize(window, &w_width, &w_height);
-		camera_set_aspect(&camera, (float)w_width/(float)w_height);
-	
 		Mat4 vp;
 		camera_get_matrix(&camera, &vp);
 
@@ -408,11 +405,11 @@ int main(void)
 
 		model_render(&cube);
 
-		glfwSwapBuffers(window);
+		window_swap_buffers(&window);
 		glfwPollEvents();
 	} while(
-		glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
-		glfwWindowShouldClose(window) == 0
+		glfwGetKey(window.handle, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
+		glfwWindowShouldClose(window.handle) == 0
 	);
 
 	// Dispose
