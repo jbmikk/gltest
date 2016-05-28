@@ -8,6 +8,7 @@
 #include "model.h"
 #include "camera.h"
 #include "window.h"
+#include "input.h"
 
 #define GLEW_STATIC 1
 
@@ -371,22 +372,32 @@ int main(void)
 	// ------
 
 	Vec3 pos = {0.5f, 0.5f, 0.8f};
-	Vec3 center = {0.0f, -0.2f, 0.2f};
-	Vec3 up = {0.0f, 1.0f, 0.0f};
+	Vec3 center;
+	Vec3 up;
+	Vec3 direction;
+	Vec3 right;
 
 	camera_init(&camera);
 	camera_set_position(&camera, &pos);
-	camera_set_center(&camera, &center);
-	camera_set_up(&camera, &up);
-
 	camera_set_fov(&camera, 1.0f);
 	camera_set_aspect(&camera, (float)window.width/(float)window.height);
 	
+	Input input;
+	input_init(&input, &window, -5.7f, -2.7f);
+
 	do {
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 		glUseProgram(program);
 		
+		input_get_direction(&input, &direction, &right);
+
+		add_v3(&center, &pos, &direction);
+		cross_v3(&up, &direction, &right);
+
+		camera_set_center(&camera, &center);
+		camera_set_up(&camera, &up);
+
 
 		// Mvp Matrix
 		// ----------
