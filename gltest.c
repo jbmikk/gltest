@@ -371,30 +371,30 @@ int main(void)
 	// Camera
 	// ------
 
-	Vec3 pos = {0.5f, 0.5f, 0.8f};
+	Vec3 pos;
 	Vec3 center;
 	Vec3 up;
 	Vec3 direction;
 	Vec3 right;
 
 	camera_init(&camera);
-	camera_set_position(&camera, &pos);
 	camera_set_fov(&camera, 1.0f);
 	camera_set_aspect(&camera, (float)window.width/(float)window.height);
 	
 	Input input;
-	input_init(&input, &window, -5.7f, -2.7f);
+	input_init(&input, &window, 0.5f, 0.5f, 0.8f, -5.7f, -2.7f);
 
 	do {
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 		glUseProgram(program);
 		
-		input_get_direction(&input, &direction, &right);
+		input_get_data(&input, &pos, &direction, &right);
 
 		add_v3(&center, &pos, &direction);
 		cross_v3(&up, &direction, &right);
 
+		camera_set_position(&camera, &pos);
 		camera_set_center(&camera, &center);
 		camera_set_up(&camera, &up);
 

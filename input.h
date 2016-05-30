@@ -10,12 +10,15 @@ typedef struct _Input {
 	int stable;
 	double lastTime;
 	float speed;
+	float x;
+	float y;
+	float z;
 	float h_angle;
 	float v_angle;
 } Input;
 
-void input_init(Input *input, Window *window, float h_angle, float v_angle);
+void input_init(Input *input, Window *window, float x, float y, float z, float h_angle, float v_angle);
 void input_reset(Input *input);
-void input_get_direction(Input *input, Vec3 *direction, Vec3 *right);
+void input_get_data(Input *input, Vec3 *position, Vec3 *direction, Vec3 *right);
 
 #endif //INPUT_H

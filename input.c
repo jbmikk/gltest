@@ -1,12 +1,15 @@
 #include "input.h"
 #include "math.h"
 
-void input_init(Input *input, Window *window, float h_angle, float v_angle)
+void input_init(Input *input, Window *window, float x, float y, float z, float h_angle, float v_angle)
 {
 	input->window = window;
 	input->stable = 0;
 	input->lastTime = 0;
 	input->speed = 0.1f;
+	input->x = x;
+	input->y = y;
+	input->z = z;
 	input->h_angle = h_angle;
 	input->v_angle = v_angle;
 
@@ -19,7 +22,7 @@ void input_reset(Input *input)
 	glfwSetCursorPos(window->handle, window->width/2, window->height/2);
 }
 
-void input_get_direction(Input *input, Vec3 *direction, Vec3 *right)
+void input_get_data(Input *input, Vec3 *position, Vec3 *direction, Vec3 *right)
 {
 	Window *window = input->window;
 	double xpos, ypos;
@@ -58,4 +61,32 @@ void input_get_direction(Input *input, Vec3 *direction, Vec3 *right)
 	(*right)[0] = sin(input->h_angle - 3.14f/2.0f);
 	(*right)[1] = 0;
 	(*right)[2] = cos(input->h_angle - 3.14f/2.0f);
+
+	float speed = input->speed*10;
+
+	if (glfwGetKey(window->handle, GLFW_KEY_UP) == GLFW_PRESS){
+		input->x += (*direction)[0] * delta * speed;
+		input->y += (*direction)[1] * delta * speed;
+		input->z += (*direction)[2] * delta * speed;
+	}
+	if (glfwGetKey(window->handle, GLFW_KEY_DOWN) == GLFW_PRESS){
+		input->x -= (*direction)[0] * delta * speed;
+		input->y -= (*direction)[1] * delta * speed;
+		input->z -= (*direction)[2] * delta * speed;
+	}
+	if (glfwGetKey(window->handle, GLFW_KEY_RIGHT) == GLFW_PRESS){
+		input->x -= (*right)[0] * delta * speed;
+		input->y -= (*right)[1] * delta * speed;
+		input->z -= (*right)[2] * delta * speed;
+	}
+	if (glfwGetKey(window->handle, GLFW_KEY_LEFT) == GLFW_PRESS){
+		input->x += (*right)[0] * delta * speed;
+		input->y += (*right)[1] * delta * speed;
+		input->z += (*right)[2] * delta * speed;
+	}
+
+	(*position)[0] = input->x;
+	(*position)[1] = input->y;
+	(*position)[2] = input->z;
+
 }
