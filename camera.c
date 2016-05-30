@@ -43,7 +43,7 @@ void camera_get_matrix(Camera *camera, Mat4 *vp)
 	look_at_m4(&view, &camera->pos, &camera->center, &camera->up);
 
 	Mat4 proj;
-	perspective_m4(&proj, camera->fov, camera->aspect, 0.1f, 100.0f);
+	perspective_m4(&proj, camera->fov, camera->aspect, 0.01f, 100.0f);
 
 	mul_m4(vp, &proj, &view);
 }
