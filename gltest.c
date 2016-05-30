@@ -333,6 +333,12 @@ int main(void)
 	glDepthFunc(GL_LESS);
 
 
+	// Enable culling
+	// --------------
+
+	glEnable(GL_CULL_FACE);
+
+
 	// Get MVP uniform
 	// ---------------
 
