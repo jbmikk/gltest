@@ -5,7 +5,7 @@
 #include "matrix.h"
 
 
-typedef struct _Camera {
+typedef struct Camera {
 	float h_angle;
 	float v_angle;
 	float fov;

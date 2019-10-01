@@ -5,7 +5,7 @@
 #include "window.h"
 #include "matrix.h"
 
-typedef struct _Input {
+typedef struct Input {
 	Window *window;
 	int stable;
 	double lastTime;

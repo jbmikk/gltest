@@ -3,7 +3,7 @@
 
 #include <GLFW/glfw3.h>
 
-typedef struct _Model {
+typedef struct Model {
 	int length;
 	GLfloat *vertices;
 	GLfloat *colors;

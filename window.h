@@ -4,7 +4,7 @@
 #include <GLFW/glfw3.h>
 
 
-typedef struct _Window {
+typedef struct Window {
 	GLFWwindow* handle;
 	int width;
 	int height;
