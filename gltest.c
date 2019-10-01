@@ -261,16 +261,6 @@ int main(void)
 		return -1;
 	}
 
-	glfwWindowHint(GLFW_SAMPLES, 4);
-	//Opengl 2.1
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-	//Opengl 3.3
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // MacOS fix
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
 	if(window_init(&window, 640, 480, "Test")) {
 		fprintf( stderr, "Failed to open window.\n" );
 		getchar();

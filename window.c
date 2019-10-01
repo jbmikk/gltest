@@ -6,6 +6,17 @@ int window_init(Window *window, int width, int height, char *name)
 	window->width = width;
 	window->height = height;
 
+	// Window hints
+	glfwWindowHint(GLFW_SAMPLES, 4);
+	//Opengl 2.1
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+	//Opengl 3.3
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // MacOS fix
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 	window->handle = glfwCreateWindow(width, height, name, NULL, NULL);
 
 	if(!window->handle) {
