@@ -5,6 +5,7 @@ add_executable (
         gltest
         gltest.c
         matrix.c
+        context.c
         texture.c
         model.c
         camera.c

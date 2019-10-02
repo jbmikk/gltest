@@ -22,13 +22,18 @@ int window_init(Window *window, int width, int height, char *name)
 	if(!window->handle) {
 		return -1;
 	}
-	glfwMakeContextCurrent(window->handle);
+	return 0;
+}
 
+void window_set_input(Window *window)
+{
 	// Ensure we can capture the escape key being pressed below
 	glfwSetInputMode(window->handle, GLFW_STICKY_KEYS, GL_TRUE);
+}
 
+void window_set_size(Window *window)
+{
 	glfwGetWindowSize(window->handle, &window->width, &window->height);
-	return 0;
 }
 
 void window_swap_buffers(Window *window)

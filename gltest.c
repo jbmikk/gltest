@@ -1,16 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 
+#include "context.h"
+#include "window.h"
 #include "matrix.h"
 #include "model.h"
 #include "camera.h"
-#include "window.h"
 #include "input.h"
-
-#define GLEW_STATIC 1
 
 const GLchar basicVertexShaderSource[] =
 	"#version 330 core\n"
@@ -255,8 +252,10 @@ void window_size_callback(GLFWwindow* window, int width, int height)
 
 int main(void)
 {
-	if(!glfwInit()) {
-		printf("Could not init GLFW");
+	Context context;
+
+	if(context_init(&context)) {
+		printf("Could not init context");
 		getchar();
 		return -1;
 	}
@@ -264,21 +263,25 @@ int main(void)
 	if(window_init(&window, 640, 480, "Test")) {
 		fprintf( stderr, "Failed to open window.\n" );
 		getchar();
-		glfwTerminate();
+		context_dispose(&context);
+		return -1;
 	};
+
+	context_set_window(&context, &window);
+
+	window_set_input(&window);
+
+	window_set_size(&window);
 
 	window_set_size_callback(&window, window_size_callback);
 
 
-	glewExperimental = GL_TRUE; // Needed for core profile
-	if (glewInit() != GLEW_OK) {
-		fprintf(stderr, "Failed to initialize GLEW\n");
+	if (context_init_window(&context)) {
+		fprintf(stderr, "Failed to initialize window context\n");
 		getchar();
-		glfwTerminate();
+		context_dispose(&context);
 		return -1;
 	}
-	//#clear errors GLEW may trigger
-	printError();
 	
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
@@ -430,6 +433,6 @@ int main(void)
 	glDeleteShader(vertexShader);
 	glDeleteProgram(program);
 
-	glfwTerminate();
+	context_dispose(&context);
 	return 0;
 }
