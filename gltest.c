@@ -269,20 +269,19 @@ int main(void)
 
 	context_set_window(&context, &window);
 
-	window_set_input(&window);
-
-	window_set_size(&window);
-
-	window_set_size_callback(&window, window_size_callback);
-
-
 	if (context_init_extensions(&context)) {
 		fprintf(stderr, "Failed to initialize extensions\n");
 		getchar();
 		context_dispose(&context);
 		return -1;
 	}
-	
+
+	window_set_input(&window);
+
+	window_set_size(&window);
+
+	window_set_size_callback(&window, window_size_callback);
+
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
 	GLuint VertexArrayID;
