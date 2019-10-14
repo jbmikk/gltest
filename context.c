@@ -29,7 +29,7 @@ void context_set_window(Context *context, Window *window)
 	glfwMakeContextCurrent(window->handle);
 }
 
-int context_init_window(Context *context)
+int context_init_extensions(Context *context)
 {
 	glewExperimental = GL_TRUE; // Needed for core profile
 	if (glewInit() != GLEW_OK) {

@@ -14,7 +14,7 @@ typedef struct Context {
 
 int context_init(Context *context);
 void context_set_window(Context *context, Window *window);
-int context_init_window(Context *context);
+int context_init_extensions(Context *context);
 void context_dispose(Context *context);
 
 #endif //CONTEXT_H

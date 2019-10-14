@@ -276,8 +276,8 @@ int main(void)
 	window_set_size_callback(&window, window_size_callback);
 
 
-	if (context_init_window(&context)) {
-		fprintf(stderr, "Failed to initialize window context\n");
+	if (context_init_extensions(&context)) {
+		fprintf(stderr, "Failed to initialize extensions\n");
 		getchar();
 		context_dispose(&context);
 		return -1;
