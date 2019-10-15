@@ -282,7 +282,7 @@ int main(void)
 
 	window_set_size_callback(&window, window_size_callback);
 
-	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+	context_set_clear_color(0.0f, 0.0f, 0.4f, 0.0f);
 
 	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
@@ -383,7 +383,7 @@ int main(void)
 	input_init(&input, &window, 0.5f, 0.5f, 0.8f, -5.7f, -2.7f);
 
 	do {
-		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+		context_clear();
 
 		glUseProgram(program);
 		
