@@ -1,10 +1,55 @@
 cmake_minimum_required (VERSION 2.8.0)
 project (gltest)
 
+include(ExternalProject)
+
+
+# Include externals
+# -----------------
+
+include_directories("${CMAKE_BINARY_DIR}/xmatrix-prefix/src/xmatrix/src")
+
+externalproject_add(
+        xmatrix
+        GIT_REPOSITORY git@github.com:jbmikk/matrix.git
+        GIT_TAG 0.1.0
+        DOWNLOAD_NAME matrix
+        DOWNLOAD_DIR matrix
+        INSTALL_COMMAND ""
+        UPDATE_DISCONNECTED 1
+)
+
+
+# Add matrix static library
+# -------------------------
+
+set(MATRIX_DIR "${CMAKE_BINARY_DIR}/xmatrix-prefix/src/xmatrix-build")
+
+add_library(matrix STATIC IMPORTED GLOBAL) 
+
+set_property(
+        TARGET matrix
+        PROPERTY IMPORTED_LOCATION "${MATRIX_DIR}/libmatrix.a"
+)
+
+
+# Add matrix update target
+# ------------------------
+
+externalproject_add_steptargets(xmatrix update)
+
+add_custom_target(
+        update 
+        DEPENDS xmatrix-update
+)
+
+
+# Pars
+# ----
+
 add_executable (
         gltest
         gltest.c
-        matrix.c
         context.c
         texture.c
         model.c
@@ -13,6 +58,9 @@ add_executable (
         input.c
 )
 
+add_dependencies(gltest xmatrix)
+
+target_link_libraries(gltest matrix)
 
 #Link GLFW
 #-----------
