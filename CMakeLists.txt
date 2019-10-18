@@ -51,7 +51,7 @@ add_executable (
         gltest
         gltest.c
         context.c
-        texture.c
+        loaders.c
         model.c
         camera.c
         window.c

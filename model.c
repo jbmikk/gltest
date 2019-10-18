@@ -1,6 +1,6 @@
 
 #include "model.h"
-#include "texture.h"
+#include "loaders.h"
 
 void model_init(Model *model)
 {
