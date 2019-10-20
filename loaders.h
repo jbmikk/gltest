@@ -3,6 +3,6 @@
 
 #include <GLFW/glfw3.h>
 
-GLuint loadDDS(char const *path);
+GLuint load_dds(char const *path);
 
 #endif //LOADERS_H

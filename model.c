@@ -50,7 +50,7 @@ int model_bind(Model *model)
 	glBindBuffer(GL_ARRAY_BUFFER, model->uvbuffer);
 	glBufferData(GL_ARRAY_BUFFER, model->length, model->uv_map, GL_STATIC_DRAW);
 
-	model->texture_id = loadDDS(model->texture_path);
+	model->texture_id = load_dds(model->texture_path);
 }
 
 int model_render(Model *model)
