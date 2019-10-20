@@ -23,6 +23,7 @@ void model_set_colors(Model *model, GLfloat *colors);
 void model_set_uv_map(Model *model, GLfloat *uv_map);
 void model_set_texture(Model *model, char const *path);
 int model_bind(Model *model);
+int model_render(Model *model);
 void model_dispose(Model *model);
 
 #endif //MODEL_H
