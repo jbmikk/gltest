@@ -1,6 +1,7 @@
 #ifndef MODEL_H
 #define MODEL_H
 
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 typedef struct Model {
