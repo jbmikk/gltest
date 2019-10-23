@@ -19,6 +19,17 @@ externalproject_add(
         UPDATE_DISCONNECTED 1
 )
 
+include_directories("${CMAKE_BINARY_DIR}/ctest-prefix/src/ctest/src")
+
+externalproject_add(
+        ctest
+        GIT_REPOSITORY git@github.com:jbmikk/ctest.git
+        DOWNLOAD_NAME ctest
+        DOWNLOAD_DIR ctest
+        INSTALL_COMMAND ""
+        UPDATE_DISCONNECTED 1
+)
+
 
 # Add matrix static library
 # -------------------------
@@ -96,3 +107,13 @@ file(GLOB files "textures/*")
 foreach(filename ${files})
 	file(COPY ${filename} DESTINATION "./textures")
 endforeach()
+
+
+# Tests
+# -----
+
+include_directories("${PROJECT_SOURCE_DIR}/src")
+
+add_executable(loaders_test test/loaders_test.c)
+
+add_dependencies(loaders_test ctest)
