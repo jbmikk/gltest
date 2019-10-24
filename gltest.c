@@ -298,7 +298,7 @@ int main(void)
 	model_set_vertices(&cube, cube_vertex_data);
 	model_set_colors(&cube, cube_color_data);
 	model_set_uv_map(&cube, cube_uv_data);
-	model_set_texture(&cube, "./textures/bricks.dds");
+	model_set_texture(&cube, "./assets/bricks.dds");
 	model_bind(&cube);
 
 

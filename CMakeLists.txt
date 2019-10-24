@@ -101,11 +101,11 @@ target_link_libraries(gltest ${OPENGL_LIBRARIES} )
 message(STATUS "Link OpenGl: ${OPENGL_LIBRARIES}")
 
 
-message(STATUS "Copy Textures")
-file(COPY textures DESTINATION .)
-file(GLOB files "textures/*")
+message(STATUS "Copy assets")
+file(COPY assets DESTINATION .)
+file(GLOB files "assets/*")
 foreach(filename ${files})
-	file(COPY ${filename} DESTINATION "./textures")
+	file(COPY ${filename} DESTINATION "./assets")
 endforeach()
 
 
